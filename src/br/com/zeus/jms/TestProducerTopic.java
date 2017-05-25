@@ -2,15 +2,15 @@ package br.com.zeus.jms;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
+import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class TesteProducer {
+public class TestProducerTopic {
 
 	public static void main(String[] args) throws NamingException, JMSException {
 
@@ -21,13 +21,11 @@ public class TesteProducer {
 		connection.start();
 
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination fila = (Destination) context.lookup("financeiro");
-		MessageProducer producer = session.createProducer(fila);
+		Topic topic = (Topic) context.lookup("loja");
 
-		for (int i = 0; i < 1000; i++) {
-			Message msg = session.createTextMessage("<pedido><id>" + i + "</id></pedido>");
-			producer.send(msg);
-		}
+		MessageProducer producer = session.createProducer(topic);
+		Message msg = session.createTextMessage("<pedido><id> 2222 </id></pedido>");
+		producer.send(msg);
 
 		session.close();
 		connection.close();
